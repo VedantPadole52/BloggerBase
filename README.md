@@ -47,7 +47,7 @@ This is a simple blog application that allows users to create and delete posts. 
 4. Click the "Delete" button on any post to remove it.
 
 
-## Future Improvements
+## Future Improvements.
 
 - Store posts in local storage or a database.
 - Implement a backend for persistent data storage.
