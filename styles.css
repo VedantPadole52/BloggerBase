@@ -1,100 +1,437 @@
+/* Base Styles */
 body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e9ecef;
+    background-color: #f5f7fa;
     color: #333;
     line-height: 1.6;
 }
 
 #app {
-    max-width: 900px;
-    margin: 40px auto;
+    max-width: 1000px;
+    margin: 0 auto;
     background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-h1 {
+/* Header Styles */
+.blog-header {
     text-align: center;
-    font-size: 2.5em;
-    color: #343a40;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.blog-header h1 {
+    font-size: 3em;
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.tagline {
+    font-size: 1.2em;
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.hero-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Content */
+.main-content {
+    padding: 30px;
+}
+
+/* Form Styles */
+.create-post-section {
+    margin-bottom: 40px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.create-post-section h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.form-group {
     margin-bottom: 20px;
 }
 
-#post-form {
-    margin-top: 30px;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #495057;
 }
 
-#post-form input, #post-form textarea {
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #6c757d;
+    font-size: 0.85em;
+}
+
+#post-form input, 
+#post-form textarea,
+#post-form select {
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     font-size: 1em;
+    transition: border-color 0.3s;
 }
 
-#post-form button {
-    padding: 12px 25px;
-    background-color: #007bff;
+#post-form input:focus, 
+#post-form textarea:focus,
+#post-form select:focus {
+    border-color: #2575fc;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
+}
+
+#post-form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.primary-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-#post-form button:hover {
-    background-color: #0056b3;
+.primary-btn:hover {
+    background: linear-gradient(135deg, #5a0cb0 0%, #1a65e6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
+}
+
+/* Posts Section */
+.posts-section {
+    margin-top: 40px;
+}
+
+.posts-section h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.posts-container {
+    display: grid;
+    grid-gap: 30px;
 }
 
 .post {
-    border-bottom: 1px solid #dee2e6;
-    padding: 20px 0;
-    transition: background-color 0.3s ease;
+    background: #fff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .post:hover {
-    background-color: #f1f3f5;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .post h2 {
     margin: 0;
     font-size: 1.8em;
+    color: #333;
+    flex: 1 0 100%;
+    margin-bottom: 10px;
+}
+
+.post-date {
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.post-category {
+    background: #e9ecef;
     color: #495057;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 500;
 }
 
 .post p {
-    margin: 10px 0;
+    margin: 15px 0;
     font-size: 1.1em;
-    color: #6c757d;
+    color: #495057;
+    line-height: 1.7;
 }
 
+.post-tags {
+    margin: 15px 0;
+}
+
+.tag {
+    display: inline-block;
+    background: #f1f3f5;
+    color: #6c757d;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.post-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.post-actions button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #138496;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+.like-btn {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.like-btn:hover {
+    background-color: #e76b02;
+}
+
+.comment-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.comment-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Comments Section */
+.comments-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.comments-list {
+    margin-bottom: 20px;
+}
+
+.comment {
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-author {
+    font-weight: 600;
+    margin: 0 0 5px 0;
+    color: #343a40;
+}
+
+.comment-text {
+    margin: 5px 0;
+    color: #495057;
+}
+
+.comment-date {
+    font-size: 0.85em;
+    color: #6c757d;
+    margin: 5px 0 0 0;
+}
+
+.add-comment input,
+.add-comment textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.add-comment textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.submit-comment-btn {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.submit-comment-btn:hover {
+    background-color: #218838;
+}
+
+/* Social Section */
+.social-section {
+    text-align: center;
+    padding: 40px 20px;
+    background: #f8f9fa;
+}
+
+.social-section h2 {
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    color: #333;
+    font-size: 1.5em;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.fa-instagram {
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.fa-facebook-f {
+    color: #3b5998;
+}
+
+.fa-twitter {
+    color: #1da1f2;
+}
+
+.fa-linkedin-in {
+    color: #0077b5;
+}
+
+/* Footer */
+.blog-footer {
+    text-align: center;
+    padding: 20px;
+    background: #343a40;
+    color: white;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
-    #app {
-        width: 90%;
-        padding: 20px;
+    .blog-header h1 {
+        font-size: 2.2em;
     }
-
-    h1 {
-        font-size: 2em;
+    
+    .tagline {
+        font-size: 1em;
     }
-
-    #post-form input, #post-form textarea {
-        font-size: 0.9em;
-    }
-
+    
     .post h2 {
         font-size: 1.5em;
     }
-
+    
     .post p {
         font-size: 1em;
+    }
+    
+    .post-actions {
+        flex-direction: column;
+    }
+    
+    .post-actions button {
+        width: 100%;
+    }
+    
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2em;
+    }
+}
+
+@media (min-width: 768px) {
+    .posts-container {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
 }
