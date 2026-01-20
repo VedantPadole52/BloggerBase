@@ -1,109 +1,57 @@
-// Database Configuration
-const DB_NAME = 'BloggerBase_Pro';
-const STORE_NAME = 'articles';
+// Database Service
+const DB_NAME = 'EditorialDB';
+const STORE = 'stories';
 
-const dbService = {
+const db = {
     async init() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, 2);
-            request.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains(STORE_NAME)) {
-                    db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                }
-            };
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = () => reject(request.error);
+        return new Promise((res) => {
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = (e) => e.target.result.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
+            req.onsuccess = (e) => res(e.target.result);
         });
     },
-
-    async save(data) {
-        const db = await this.init();
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        tx.objectStore(STORE_NAME).add({ ...data, date: new Date().toISOString() });
-        return new Promise(resolve => tx.oncomplete = resolve);
+    async save(obj) {
+        const conn = await this.init();
+        const tx = conn.transaction(STORE, 'readwrite');
+        tx.objectStore(STORE).add(obj);
     },
-
-    async getAll() {
-        const db = await this.init();
-        return new Promise(resolve => {
-            const tx = db.transaction(STORE_NAME, 'readonly');
-            tx.objectStore(STORE_NAME).getAll().onsuccess = (e) => resolve(e.target.result.reverse());
+    async fetchAll() {
+        const conn = await this.init();
+        return new Promise(res => {
+            const req = conn.transaction(STORE, 'readonly').objectStore(STORE).getAll();
+            req.onsuccess = () => res(req.result.reverse());
         });
-    },
-
-    async delete(id) {
-        const db = await this.init();
-        const tx = db.transaction(STORE_NAME, 'readwrite');
-        tx.objectStore(STORE_NAME).delete(id);
-        return new Promise(resolve => tx.oncomplete = resolve);
     }
 };
 
-// UI Rendering Logic
-const UI = {
-    renderPosts(posts) {
-        const grid = document.getElementById('posts-grid');
-        grid.innerHTML = posts.length ? '' : `
-            <div class="empty-state">
-                <i class="fas fa-feather" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
-                <p>No stories yet. Be the first to write!</p>
+// UI Handling
+const render = async () => {
+    const stories = await db.fetchAll();
+    const grid = document.getElementById('posts-grid');
+    grid.innerHTML = stories.map(s => `
+        <article class="post-card">
+            <span class="category">${s.category}</span>
+            <h3>${s.title}</h3>
+            <p>${s.content}</p>
+            <div style="margin-top: 1rem; font-size: 0.8rem; color: #999;">
+                ${new Date().toLocaleDateString()} · 5 min read
             </div>
-        `;
-
-        posts.forEach(post => {
-            const card = `
-                <article class="post-card">
-                    <span class="post-badge">${post.category}</span>
-                    <h3 class="post-title">${post.title}</h3>
-                    <p class="post-excerpt">${post.content}</p>
-                    <div class="post-footer">
-                        <span style="font-size: 0.8rem; color: #94a3b8;">
-                            <i class="far fa-calendar-alt"></i> ${new Date(post.date).toLocaleDateString()}
-                        </span>
-                        <div class="actions">
-                            <button class="btn-icon" onclick="alert('Like feature coming soon!')">
-                                <i class="far fa-heart"></i>
-                            </button>
-                            <button class="btn-icon delete" onclick="handleDelete(${post.id})">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-            `;
-            grid.insertAdjacentHTML('beforeend', card);
-        });
-    }
+        </article>
+    `).join('');
 };
 
-// Event Listeners
-document.getElementById('post-form').addEventListener('submit', async (e) => {
+// Modal Logic
+const modal = document.getElementById('creator-modal');
+document.getElementById('open-creator').onclick = () => modal.style.display = 'block';
+document.querySelector('.close-modal').onclick = () => modal.style.display = 'none';
+
+document.getElementById('post-form').onsubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const postData = Object.fromEntries(formData.entries());
-    
-    const btn = document.getElementById('submit-btn');
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Publishing...';
-
-    await dbService.save(postData);
+    const fd = new FormData(e.target);
+    await db.save(Object.fromEntries(fd));
+    modal.style.display = 'none';
     e.target.reset();
-    
-    btn.innerHTML = '<span>Publish Story</span> <i class="fas fa-paper-plane"></i>';
-    const posts = await dbService.getAll();
-    UI.renderPosts(posts);
-});
+    render();
+};
 
-async function handleDelete(id) {
-    if(confirm('Delete this story?')) {
-        await dbService.delete(id);
-        const posts = await dbService.getAll();
-        UI.renderPosts(posts);
-    }
-}
-
-// Initial Load
-window.addEventListener('DOMContentLoaded', async () => {
-    const posts = await dbService.getAll();
-    UI.renderPosts(posts);
-});
+window.onload = render;
