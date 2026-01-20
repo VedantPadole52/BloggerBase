@@ -3,55 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BloggerBase | Editorial</title>
+    <title>BloggerBase | Modern Thoughts</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-content">
-            <span class="logo">B.Base</span>
-            <div class="nav-links">
-                <button id="open-creator" class="write-btn"><i class="fas fa-pen-nib"></i> Write a Story</button>
-            </div>
-        </div>
-    </nav>
+    <div class="app-container">
+        <aside class="sidebar">
+            <header class="brand">
+                <div class="logo-icon"><i class="fas fa-feather-alt"></i></div>
+                <div>
+                    <h1>BloggerBase</h1>
+                    <p>Creator Studio</p>
+                </div>
+            </header>
 
-    <header class="hero">
-        <h1>Stay curious.</h1>
-        <p>Discover stories, thinking, and expertise from writers on any topic.</p>
-    </header>
+            <form id="post-form" class="creator-form">
+                <div class="input-group">
+                    <label for="title">Story Title</label>
+                    <input type="text" id="title" name="title" placeholder="What's on your mind?" required>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category">
+                            <option value="Tech">Tech</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Design">Design</option>
+                            <option value="Personal">Personal</option>
+                        </select>
+                    </div>
+                </div>
 
-    <main class="container">
-        <div class="feed-controls">
-            <div class="tags-cloud">
-                <button class="tag active">All Stories</button>
-                <button class="tag">Technology</button>
-                <button class="tag">Lifestyle</button>
-                <button class="tag">Design</button>
-            </div>
-        </div>
+                <div class="input-group">
+                    <label for="content">The Story</label>
+                    <textarea id="content" name="content" placeholder="Write your masterpiece..." required></textarea>
+                </div>
 
-        <div id="posts-grid" class="editorial-grid">
-            </div>
-    </main>
-
-    <div id="creator-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal">&times;</button>
-            <h2>Create New Story</h2>
-            <form id="post-form">
-                <input type="text" name="title" placeholder="Title" required class="input-title">
-                <select name="category" class="input-select">
-                    <option value="Technology">Technology</option>
-                    <option value="Lifestyle">Lifestyle</option>
-                    <option value="Personal">Personal</option>
-                </select>
-                <textarea name="content" placeholder="Tell your story..." required class="input-body"></textarea>
-                <button type="submit" class="btn-publish">Publish Story</button>
+                <button type="submit" id="submit-btn" class="btn-primary">
+                    <span>Publish Story</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </form>
-        </div>
+
+            <footer class="sidebar-footer">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </footer>
+        </aside>
+
+        <main class="feed-section">
+            <nav class="top-nav">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search stories...">
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Guest+Author&background=6366f1&color=fff" alt="Profile">
+                </div>
+            </nav>
+
+            <div class="feed-header">
+                <h2>Recent Stories</h2>
+                <div class="feed-filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Popular</button>
+                </div>
+            </div>
+
+            <div id="posts-grid" class="posts-grid">
+                </div>
+        </main>
     </div>
 
     <script src="app.js"></script>
