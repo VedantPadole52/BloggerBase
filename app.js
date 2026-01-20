@@ -1,11 +1,11 @@
-// Database Service Module
-const DB_NAME = 'BloggerBaseDB';
-const STORE_NAME = 'posts';
+// Database Configuration
+const DB_NAME = 'BloggerBase_Pro';
+const STORE_NAME = 'articles';
 
 const dbService = {
-    init() {
+    async init() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open(DB_NAME, 1);
+            const request = indexedDB.open(DB_NAME, 2);
             request.onupgradeneeded = (e) => {
                 const db = e.target.result;
                 if (!db.objectStoreNames.contains(STORE_NAME)) {
@@ -17,75 +17,93 @@ const dbService = {
         });
     },
 
-    async getAllPosts() {
+    async save(data) {
         const db = await this.init();
-        return new Promise((resolve) => {
-            const transaction = db.transaction(STORE_NAME, 'readonly');
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
-            request.onsuccess = () => resolve(request.result.reverse());
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).add({ ...data, date: new Date().toISOString() });
+        return new Promise(resolve => tx.oncomplete = resolve);
+    },
+
+    async getAll() {
+        const db = await this.init();
+        return new Promise(resolve => {
+            const tx = db.transaction(STORE_NAME, 'readonly');
+            tx.objectStore(STORE_NAME).getAll().onsuccess = (e) => resolve(e.target.result.reverse());
         });
     },
 
-    async savePost(post) {
+    async delete(id) {
         const db = await this.init();
-        const transaction = db.transaction(STORE_NAME, 'readwrite');
-        const store = transaction.objectStore(STORE_NAME);
-        return post.id ? store.put(post) : store.add(post);
-    },
-
-    async deletePost(id) {
-        const db = await this.init();
-        const transaction = db.transaction(STORE_NAME, 'readwrite');
-        transaction.objectStore(STORE_NAME).delete(id);
+        const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.objectStore(STORE_NAME).delete(id);
+        return new Promise(resolve => tx.oncomplete = resolve);
     }
 };
 
-// UI Controller
+// UI Rendering Logic
 const UI = {
-    renderPost(post) {
-        const template = `
-            <article class="post-card" data-id="${post.id}">
-                <div class="post-badge">${post.category || 'General'}</div>
-                <h3 class="post-title">${post.title}</h3>
-                <p class="post-excerpt">${post.content.substring(0, 150)}...</p>
-                <div class="post-meta">
-                    <span><i class="far fa-calendar"></i> ${new Date(post.date).toLocaleDateString()}</span>
-                    <span><i class="far fa-heart"></i> ${post.likes || 0}</span>
-                </div>
-                <div class="post-footer">
-                    <button onclick="editPost(${post.id})" class="btn-icon"><i class="fas fa-edit"></i></button>
-                    <button onclick="deletePost(${post.id})" class="btn-icon btn-danger"><i class="fas fa-trash"></i></button>
-                </div>
-            </article>
+    renderPosts(posts) {
+        const grid = document.getElementById('posts-grid');
+        grid.innerHTML = posts.length ? '' : `
+            <div class="empty-state">
+                <i class="fas fa-feather" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 1rem;"></i>
+                <p>No stories yet. Be the first to write!</p>
+            </div>
         `;
-        document.getElementById('posts-grid').insertAdjacentHTML('beforeend', template);
-    },
 
-    async refreshFeed() {
-        const container = document.getElementById('posts-grid');
-        container.innerHTML = '<div class="loader"></div>';
-        const posts = await dbService.getAllPosts();
-        container.innerHTML = posts.length ? '' : '<p class="empty-state">No stories yet. Start writing!</p>';
-        posts.forEach(post => this.renderPost(post));
+        posts.forEach(post => {
+            const card = `
+                <article class="post-card">
+                    <span class="post-badge">${post.category}</span>
+                    <h3 class="post-title">${post.title}</h3>
+                    <p class="post-excerpt">${post.content}</p>
+                    <div class="post-footer">
+                        <span style="font-size: 0.8rem; color: #94a3b8;">
+                            <i class="far fa-calendar-alt"></i> ${new Date(post.date).toLocaleDateString()}
+                        </span>
+                        <div class="actions">
+                            <button class="btn-icon" onclick="alert('Like feature coming soon!')">
+                                <i class="far fa-heart"></i>
+                            </button>
+                            <button class="btn-icon delete" onclick="handleDelete(${post.id})">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            `;
+            grid.insertAdjacentHTML('beforeend', card);
+        });
     }
 };
 
-// Event Initializers
+// Event Listeners
 document.getElementById('post-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
-    const postData = {
-        title: formData.get('title'),
-        content: formData.get('content'),
-        category: formData.get('category'),
-        date: new Date().toISOString(),
-        likes: 0
-    };
+    const postData = Object.fromEntries(formData.entries());
     
-    await dbService.savePost(postData);
+    const btn = document.getElementById('submit-btn');
+    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Publishing...';
+
+    await dbService.save(postData);
     e.target.reset();
-    UI.refreshFeed();
+    
+    btn.innerHTML = '<span>Publish Story</span> <i class="fas fa-paper-plane"></i>';
+    const posts = await dbService.getAll();
+    UI.renderPosts(posts);
 });
 
-document.addEventListener('DOMContentLoaded', () => UI.refreshFeed());
+async function handleDelete(id) {
+    if(confirm('Delete this story?')) {
+        await dbService.delete(id);
+        const posts = await dbService.getAll();
+        UI.renderPosts(posts);
+    }
+}
+
+// Initial Load
+window.addEventListener('DOMContentLoaded', async () => {
+    const posts = await dbService.getAll();
+    UI.renderPosts(posts);
+});
