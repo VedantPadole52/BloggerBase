@@ -3,99 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freedom Blog</title>
+    <title>BloggerBase | Modern Thoughts</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="app">
-        <header class="blog-header">
-            <h1>Freedom Blog</h1>
-            <p class="tagline">Express yourself freely, share your thoughts with the world</p>
-        </header>
-        
-        <div class="hero-section">
-            <img src="https://thumbs.dreamstime.com/z/3d-character-laptop-blog-sign-17334069.jpg" alt="blog" class="hero-image">
-        </div>
-             
-        <!-- AI Chatbot Icon -->
-        <a href="https://ai-chat-bot-three-ashy.vercel.app/" class="social-icon" target="_blank" title="AI Chatbot">
-            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Chatbot" style="width: 100px; height: 100px;" />
-        </a>
-        
-        <div class="main-content">
-            <section class="create-post-section">
-                <h2>Create Your Freedom Thoughts</h2>
-                <form id="post-form">
-                    <div class="form-group">
-                        <label for="title">Title</label>
-                        <input type="text" id="title" placeholder="Enter your post title" required>
-                    </div>
-                    
-                    <div class="form-group">
+    <div class="app-container">
+        <aside class="sidebar">
+            <header class="brand">
+                <div class="logo-icon"><i class="fas fa-feather-alt"></i></div>
+                <div>
+                    <h1>BloggerBase</h1>
+                    <p>Creator Studio</p>
+                </div>
+            </header>
+
+            <form id="post-form" class="creator-form">
+                <div class="input-group">
+                    <label for="title">Story Title</label>
+                    <input type="text" id="title" name="title" placeholder="What's on your mind?" required>
+                </div>
+                
+                <div class="input-row">
+                    <div class="input-group">
                         <label for="category">Category</label>
-                        <select id="category">
-                            <option value="">Select a category (optional)</option>
-                            <option value="Technology">Technology</option>
+                        <select id="category" name="category">
+                            <option value="Tech">Tech</option>
                             <option value="Lifestyle">Lifestyle</option>
-                            <option value="Travel">Travel</option>
-                            <option value="Food">Food</option>
-                            <option value="Health">Health</option>
+                            <option value="Design">Design</option>
                             <option value="Personal">Personal</option>
-                            <option value="Other">Other</option>
                         </select>
                     </div>
-                    
-                    <div class="form-group">
-                        <label for="tags">Tags</label>
-                        <input type="text" id="tags" placeholder="Enter tags separated by commas">
-                        <small>Example: inspiration, thoughts, life</small>
-                    </div>
-
-                    
-                    <div class="form-group">
-                        <label for="content">Content</label>
-                        <textarea id="content" placeholder="Share your thoughts here..." required></textarea>
-                    </div>
-                    
-                    <button type="submit" id="submit-btn" class="primary-btn">Publish Post</button>
-                </form>
-            </section>
-             
-            
-            <section class="posts-section">
-                <h2>Recent Posts</h2>
-                <div id="posts" class="posts-container">
-                    <!-- Posts will be dynamically added here -->
                 </div>
-            </section>
-        </div>
-        
-        <section class="social-section">
-            <h2>Share on Social Media</h2>
-            <div class="social-icons">
-                <a href="https://www.instagram.com/?hl=en" class="social-icon" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://www.facebook.com/" class="social-icon" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://x.com/?lang=en-in" class="social-icon" target="_blank">
-                    <i class="fab fa-twitter"></i>
-                </a>
-                <a href="https://www.linkedin.com/" class="social-icon" target="_blank">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-               
-            </div>
-        </section>
-        
-        <footer class="blog-footer">
-            <p>&copy; 2023 Freedom Blog. All rights reserved.</p>
-        </footer>
-    </div>
 
+                <div class="input-group">
+                    <label for="content">The Story</label>
+                    <textarea id="content" name="content" placeholder="Write your masterpiece..." required></textarea>
+                </div>
+
+                <button type="submit" id="submit-btn" class="btn-primary">
+                    <span>Publish Story</span>
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </form>
+
+            <footer class="sidebar-footer">
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </footer>
+        </aside>
+
+        <main class="feed-section">
+            <nav class="top-nav">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search stories...">
+                </div>
+                <div class="user-profile">
+                    <img src="https://ui-avatars.com/api/?name=Guest+Author&background=6366f1&color=fff" alt="Profile">
+                </div>
+            </nav>
+
+            <div class="feed-header">
+                <h2>Recent Stories</h2>
+                <div class="feed-filters">
+                    <button class="filter-btn active">All</button>
+                    <button class="filter-btn">Popular</button>
+                </div>
+            </div>
+
+            <div id="posts-grid" class="posts-grid">
+                </div>
+        </main>
+    </div>
 
     <script src="app.js"></script>
 </body>
